@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EduVerse • Assignment Helper</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --card: #101828;
+      --muted: #9aa4b2;
+      --text: #e6e9ef;
+      --accent: #6ea8fe;
+      --accent-2: #22c55e;
+      --border: #1f2937;
+      --chip: #0f172a;
+      --warn: #f59e0b;
+      --danger: #ef4444;
+      --radius: 16px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial;
+      background: radial-gradient(1200px 600px at 80% -10%, #13213a 0%, #0b1220 60%), var(--bg);
+      color:var(--text);
+    }
+    a{color:inherit;text-decoration:none}
+    .container{display:grid; grid-template-columns:280px 1fr 360px; gap:20px; padding:20px; max-width:1400px; margin:0 auto;}
+    header{
+      position:sticky; top:0; z-index:10; backdrop-filter: blur(10px);
+      background: linear-gradient(180deg, rgba(11,18,32,.9), rgba(11,18,32,.6));
+      border-bottom:1px solid var(--border);
+    }
+    .topbar{
+      max-width:1400px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; gap:14px;
+    }
+    .logo{
+      display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.2px;
+    }
+    .logo-img {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+    }
+    .search{
+      flex:1; position:relative;
+    }
+    .search input{
+      width:100%; background:#0e1629; color:var(--text);
+      border:1px solid var(--border); border-radius:12px; padding:12px 42px 12px 40px; outline:none;
+    }
+    .icon{position:absolute; left:12px; top:50%; transform:translateY(-50%); opacity:.7}
+    .actions{display:flex; gap:10px; align-items:center}
+    .profile-img {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 2px solid var(--accent);
+      cursor: pointer;
+    }
+    .chip{
+      display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px;
+      background:#0e1728; border:1px solid var(--border); color:var(--muted); font-size:12px;
+    }
+
+    /* Cards & columns */
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.0));
+      border:1px solid var(--border); border-radius: var(--radius); padding:16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.02);
+    }
+    .col{display:flex; flex-direction:column; gap:16px}
+
+    /* Sidebar left */
+    .nav .item{display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:10px; color:#b8c1cc}
+    .nav .item.active, .nav .item:hover{background:#0e1728; color:var(--text); border:1px solid var(--border)}
+    .section-title{font-size:13px; color:var(--muted); letter-spacing:.12em; text-transform:uppercase; margin:10px 2px}
+
+    /* Assignment Helper */
+    .helper-area{display:flex; gap:20px}
+    .editor{
+      flex:2; display:flex; flex-direction:column;
+    }
+    .editor textarea{
+      flex:1; min-height:300px; background:#0e1629; color:var(--text);
+      border:1px solid var(--border); border-radius:12px; padding:12px; resize:vertical;
+    }
+    .editor button{
+      margin-top:10px; background:linear-gradient(135deg, #2563eb, #22c55e);
+      border:none; border-radius:8px; padding:10px; color:white; cursor:pointer;
+    }
+    .assistant-panel{
+      flex:1; background:#0e1629; border:1px solid var(--border); border-radius:12px; padding:12px;
+      display:flex; flex-direction:column; gap:12px;
+    }
+    .assistant-section{background:#101828; border:1px solid var(--border); border-radius:10px; padding:10px}
+    .assistant-section h4{margin:0 0 6px; font-size:14px}
+    .assistant-section p{margin:0; font-size:13px; color:var(--muted)}
+
+    /* Right column widgets */
+    .mini-title{font-size:12px; color:var(--muted); margin-bottom:8px; text-transform:uppercase; letter-spacing:.1em}
+    .pill{display:inline-flex; align-items:center; gap:6px; background:#0f172a; border:1px solid var(--border); padding:6px 10px; border-radius:999px; color:#9fb3c8; font-size:12px}
+
+    /* Responsive */
+    @media (max-width: 1100px){
+      .container{grid-template-columns:1fr; padding:14px}
+      .rightcol{order:-1}
+      .helper-area{flex-direction:column}
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="topbar">
+    <div class="logo">
+      <img src="eduverse-applogo.png" alt="EduVerse Logo" class="logo-img" />
+      <div>EduVerse <span class="chip">Assignment Helper</span></div>
+    </div>
+    <div class="search">
+      <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 21l-4.3-4.3M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15z" stroke="#9aa4b2" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <input type="search" placeholder="Search assignments…" />
+    </div>
+    <div class="actions">
+      <img src="profile.png" alt="User Profile" class="profile-img" />
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <!-- LEFT SIDEBAR -->
+  <aside class="col">
+    <div class="card nav">
+      <div class="section-title">Navigation</div>
+      <a class="item" href="#">Dashboard</a>
+      <a class="item" href="#"><span>Courses</span></a>
+      <a class="item" href="#"><span>Community</span></a>
+      <a class="item" href="#"><span>Library</span></a>
+      <a class="item active" href="#"><span>Assignment Helper</span></a>
+      <a class="item" href="#">Messages</a>
+    </div>
+  </aside>
+
+  <!-- MIDDLE COLUMN (ASSIGNMENT HELPER TOOL) -->
+  <section class="col">
+    <div class="card">
+      <h2>Assignment Helper Tool (AI Support)</h2>
+      <p style="color:var(--muted); font-size:14px">Get real-time AI assistance while writing assignments. Suggestions, plagiarism checks, and citation formatting all in one place.</p>
+      <div class="helper-area">
+        <!-- Writing editor -->
+        <div class="editor">
+          <textarea placeholder="Start writing your assignment here..."></textarea>
+          <button>Run AI Assistant</button>
+        </div>
+        <!-- AI Assistant panel -->
+        <div class="assistant-panel">
+          <div class="assistant-section">
+            <h4>Writing Suggestions</h4>
+            <p>Consider breaking this sentence into two for clarity.</p>
+          </div>
+          <div class="assistant-section">
+            <h4>Plagiarism Check</h4>
+            <p>3% similarity detected. Mostly citations — acceptable.</p>
+          </div>
+          <div class="assistant-section">
+            <h4>Citation Helper</h4>
+            <p>APA Format: (Smith, 2021)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RIGHT COLUMN -->
+  <aside class="col rightcol">
+    <div class="card">
+      <div class="mini-title">Tips</div>
+      <ul style="margin:0 0 4px 18px; color:var(--muted); line-height:1.7">
+        <li>Use AI suggestions as guidance, not answers</li>
+        <li>Always double-check plagiarism results</li>
+        <li>Format citations consistently</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="mini-title">Recently Checked</div>
+      <div class="pill">ENG201 Essay</div>
+      <div class="pill">CS101 Lab Report</div>
+      <div class="pill">BUS102 Case Study</div>
+    </div>
+  </aside>
+</main>
+
+</body>
+</html>

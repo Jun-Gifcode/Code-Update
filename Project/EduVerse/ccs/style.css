@@ -1,0 +1,29 @@
+.logo-img {
+    max-height: 34px;   /* force the logo to never exceed 28px */
+    width: auto;        /* keeps proportions */
+    display: block;     /* ensures it respects height */
+}
+.profile-img {
+    width: 34px;       /* adjust size */
+    height: 34px;
+    border-radius: 50%; /* makes it a circle */
+    border: 2px solid var(--accent); /* optional nice border */
+    cursor: pointer;   /* so it looks clickable */
+}
+.profile-img {
+    width: 34px;       /* adjust size */
+    height: 34px;
+    border-radius: 50%; /* makes it a circle */
+    border: 2px solid var(--accent); /* optional nice border */
+    cursor: pointer;   /* so it looks clickable */
+}
+.store-btn {
+    height: 60px;   /* consistent button height */
+    width: auto;    /* keep proportions */
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.store-btn:hover {
+    transform: scale(1.05); /* small hover zoom */
+}

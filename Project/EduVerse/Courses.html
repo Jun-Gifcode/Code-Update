@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EduVerse • Community</title>
+  <style>
+    :root{
+      --bg: #0b1220;
+      --card: #101828;
+      --muted: #9aa4b2;
+      --text: #e6e9ef;
+      --accent: #6ea8fe;
+      --accent-2: #22c55e;
+      --border: #1f2937;
+      --chip: #0f172a;
+      --warn: #f59e0b;
+      --danger: #ef4444;
+      --radius: 16px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial;
+      background: radial-gradient(1200px 600px at 80% -10%, #13213a 0%, #0b1220 60%), var(--bg);
+      color:var(--text);
+    }
+    a{color:inherit;text-decoration:none}
+    .container{display:grid; grid-template-columns:280px 1fr 360px; gap:20px; padding:20px; max-width:1400px; margin:0 auto;}
+    header{
+      position:sticky; top:0; z-index:10; backdrop-filter: blur(10px);
+      background: linear-gradient(180deg, rgba(11,18,32,.9), rgba(11,18,32,.6));
+      border-bottom:1px solid var(--border);
+    }
+    .topbar{
+      max-width:1400px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; gap:14px;
+    }
+    .logo{
+      display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.2px;
+    }
+    .logo-badge{
+      width:34px; height:34px; border-radius:10px; display:grid; place-items:center;
+      background: linear-gradient(135deg, #2563eb, #22c55e);
+      box-shadow: 0 10px 28px rgba(37,99,235,.35);
+      font-weight:900;
+    }
+    .search{
+      flex:1; position:relative;
+    }
+    .search input{
+      width:100%; background:#0e1629; color:var(--text);
+      border:1px solid var(--border); border-radius:12px; padding:12px 42px 12px 40px; outline:none;
+    }
+    .icon{position:absolute; left:12px; top:50%; transform:translateY(-50%); opacity:.7}
+    .actions{display:flex; gap:10px; align-items:center}
+    .btn{
+      background:#122036; border:1px solid var(--border); color:var(--text);
+      padding:10px 14px; border-radius:10px; cursor:pointer; transition:.2s;
+    }
+    .btn:hover{transform:translateY(-1px); border-color:#2a3b59}
+    .btn-primary{background:linear-gradient(135deg, #2563eb, #22c55e); border:none; color:white}
+    .btn-danger{background:linear-gradient(135deg, #ef4444, #f59e0b); border:none;}
+    .chip{
+      display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px;
+      background:#0e1728; border:1px solid var(--border); color:var(--muted); font-size:12px;
+    }
+
+    /* Cards & columns */
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.0));
+      border:1px solid var(--border); border-radius: var(--radius); padding:16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.02);
+    }
+    .col{display:flex; flex-direction:column; gap:16px}
+
+    /* Sidebar left */
+    .nav .item{display:flex; align-items:center; gap:12px; padding:10px 12px; border-radius:10px; color:#b8c1cc}
+    .nav .item.active, .nav .item:hover{background:#0e1728; color:var(--text); border:1px solid var(--border)}
+    .section-title{font-size:13px; color:var(--muted); letter-spacing:.12em; text-transform:uppercase; margin:10px 2px}
+
+    /* Tabs */
+    .tabs{display:flex; gap:8px; padding:6px; background:#0e1728; border:1px solid var(--border); border-radius:12px; width:max-content}
+    .tab{padding:8px 12px; border-radius:8px; color:#b8c1cc; cursor:pointer}
+    .tab.active{background:#122036; color:var(--text); border:1px solid #20314e}
+    .tabpanes > section{display:none}
+    .tabpanes > section.active{display:block}
+
+    /* Feed */
+    .composer{display:flex; gap:10px; align-items:flex-start}
+    .avatar{width:40px; height:40px; border-radius:10px; background:#1a2440}
+    .composer textarea{
+      flex:1; background:#0e1629; color:var(--text); border:1px solid var(--border); border-radius:12px; padding:12px; min-height:72px; resize:vertical;
+    }
+    .feed .post{display:grid; grid-template-columns:48px 1fr; gap:12px}
+    .post .meta{display:flex; align-items:center; gap:8px; color:var(--muted); font-size:12px}
+    .post .bubble{background:#0e1629; border:1px solid var(--border); padding:12px; border-radius:12px}
+    .post .tag{font-size:12px; color:#93c5fd; border:1px solid #1f2f4d; padding:2px 8px; border-radius:999px}
+    .post-actions{display:flex; gap:8px; margin-top:8px}
+    .spacer{height:6px}
+
+    /* Forums */
+    .forum-list .thread{
+      display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center; padding:12px; border:1px solid var(--border);
+      border-radius:12px; background:#0e1629;
+    }
+    .thread .title{font-weight:600}
+    .thread .meta{color:var(--muted); font-size:12px}
+
+    /* Groups */
+    .group{display:flex; align-items:center; justify-content:space-between; padding:12px; border:1px solid var(--border); border-radius:12px; background:#0e1629}
+    .group .name{font-weight:600}
+    .group .desc{color:var(--muted); font-size:12px}
+    .group .right{display:flex; align-items:center; gap:10px}
+
+    /* Right column widgets */
+    .mini-title{font-size:12px; color:var(--muted); margin-bottom:8px; text-transform:uppercase; letter-spacing:.1em}
+    .pill{display:inline-flex; align-items:center; gap:6px; background:#0f172a; border:1px solid var(--border); padding:6px 10px; border-radius:999px; color:#9fb3c8; font-size:12px}
+
+    /* Modal */
+    .modal{
+      position:fixed; inset:0; display:none; place-items:center; background:rgba(3,7,18,.6); backdrop-filter: blur(6px); z-index:50;
+    }
+    .modal.open{display:grid}
+    .modal .dialog{
+      width:min(520px, 92vw); background:#0f172a; border:1px solid var(--border); border-radius:16px; padding:16px;
+      box-shadow: 0 20px 50px rgba(0,0,0,.45);
+    }
+    .row{display:flex; gap:10px}
+    .row input, .row textarea, .row select{
+      width:100%; background:#0b1426; border:1px solid var(--border); color:var(--text); border-radius:10px; padding:10px;
+    }
+
+    /* Responsive */
+    @media (max-width: 1100px){
+      .container{grid-template-columns:1fr; padding:14px}
+      .rightcol{order:-1}
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="topbar">
+    <div class="logo">
+      <img src="eduverse-applogo.png" alt="EduVerse Logo" class="logo-img" />
+      <div>EduVerse <span class="chip">Community</span></div>
+    </div>
+    <div class="search">
+      <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 21l-4.3-4.3M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15z" stroke="#9aa4b2" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <input type="search" placeholder="Search EduFeed, forums, or groups…" />
+    </div>
+    <div class="actions">
+      <button class="btn" id="btnNewPost">+ New Post</button>
+      <button class="btn" id="btnNewGroup">+ Create Group</button>
+      <img src="profile.png" alt="User Profile" class="profile-img">
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <!-- LEFT SIDEBAR -->
+  <aside class="col">
+    <div class="card nav">
+      <div class="section-title">Navigation</div>
+      <a class="item" href="#">Dashboard</a>
+      <a class="item" href="#"><span>Courses</span></a>
+      <a class="item active" href="#"><span>Community</span></a>
+      <a class="item" href="#">Library</a>
+      <a class="item" href="#">Messages</a>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Active Courses</div>
+      <div class="chip">CS101 • Intro to Programming</div>
+      <div class="spacer"></div>
+      <div class="chip">BUS102 • Business Fundamentals</div>
+      <div class="spacer"></div>
+      <div class="chip">ENG201 • Engineering Math</div>
+    </div>
+  </aside>
+
+  <!-- MIDDLE COLUMN (TABS) -->
+  <section class="col">
+    <div class="card" style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+      <div class="tabs" role="tablist" aria-label="Community sections">
+        <button class="tab active" role="tab" aria-selected="true" data-tab="feed">EduFeed</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="forums">Forums</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="groups">Study Groups</button>
+      </div>
+      <div class="row">
+        <span class="pill">Academic Focus</span>
+        <span class="pill">No Spam</span>
+        <span class="pill">Be Kind</span>
+      </div>
+    </div>
+
+    <div class="tabpanes">
+
+      <!-- FEED -->
+      <section id="pane-feed" class="card feed active" aria-labelledby="feed">
+        <div class="composer">
+          <div class="avatar"></div>
+          <div style="flex:1">
+            <textarea placeholder="Share an announcement, study tip, or ask a question…"></textarea>
+            <div style="display:flex; gap:8px; margin-top:8px;">
+              <button class="btn-primary">Post to EduFeed</button>
+              <button class="btn">Attach</button>
+              <button class="btn">Poll</button>
+            </div>
+          </div>
+        </div>
+        <hr style="border:0; border-top:1px solid var(--border); margin:16px 0" />
+
+        <!-- Post 1 -->
+        <article class="post">
+          <div class="avatar"></div>
+          <div>
+            <div class="meta"><strong>Dr. Amina</strong> • CS101 • 12m ago <span class="tag">Announcement</span></div>
+            <div class="bubble">
+              Week 5 lecture notes have been uploaded. Lab 2 starts Thursday—please form teams of 3 in this thread.
+              <div class="post-actions">
+                <button class="btn">👍 24</button>
+                <button class="btn">💬 12</button>
+                <button class="btn">🔗 Copy link</button>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- Post 2 -->
+        <article class="post">
+          <div class="avatar"></div>
+          <div>
+            <div class="meta"><strong>Nadia</strong> • ENG201 • 1h ago <span class="tag" style="color:#86efac;border-color:#1f3d2a">Study Tip</span></div>
+            <div class="bubble">
+              Sharing my calculus revision sheet + past-year Qs. Anyone keen to do a 1-hour Pomodoro session tonight?
+              <div class="post-actions">
+                <button class="btn">👍 17</button>
+                <button class="btn">💬 9</button>
+                <button class="btn">🔗 Copy link</button>
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <!-- FORUMS -->
+      <section id="pane-forums" class="card forum-list" aria-labelledby="forums">
+        <div class="row" style="margin-bottom:10px">
+          <select aria-label="Select course">
+            <option>CS101 • Intro to Programming</option>
+            <option>BUS102 • Business Fundamentals</option>
+            <option>ENG201 • Engineering Math</option>
+          </select>
+          <input placeholder="Search threads…" />
+          <button class="btn-primary">+ New Thread</button>
+        </div>
+
+        <div class="thread">
+          <div>
+            <div class="title">Assignment 2 Q&A: functions, loops, and edge cases</div>
+            <div class="meta">Started by <strong>Farid</strong> • 43 replies • Updated 5m ago</div>
+          </div>
+          <div><span class="pill">CS101</span></div>
+        </div>
+
+        <div class="thread">
+          <div>
+            <div class="title">Exam Revision: common runtime errors and debugging tips</div>
+            <div class="meta">Started by <strong>Lina</strong> • 21 replies • Updated 1h ago</div>
+          </div>
+          <div><span class="pill">CS101</span></div>
+        </div>
+
+        <div class="thread">
+          <div>
+            <div class="title">Project Teams Finder – post your interests here</div>
+            <div class="meta">Started by <strong>Akash</strong> • 58 replies • Updated 2h ago</div>
+          </div>
+          <div><span class="pill">All Courses</span></div>
+        </div>
+      </section>
+
+      <!-- GROUPS -->
+      <section id="pane-groups" class="card">
+        <div class="row" style="justify-content:space-between; align-items:center; margin-bottom:10px">
+          <div class="mini-title">Your Study Groups</div>
+          <div class="row"><button class="btn-primary" id="openCreateGroup">+ Create Study Group</button></div>
+        </div>
+
+        <div class="group">
+          <div>
+            <div class="name">CS101 • Python Basics Circle</div>
+            <div class="desc">Meets Tue/Thu 8pm • 12 members</div>
+          </div>
+          <div class="right">
+            <button class="btn">Open Chat</button>
+            <button class="btn">Schedule</button>
+          </div>
+        </div>
+
+        <div class="group">
+          <div>
+            <div class="name">ENG201 • Calculus Sprint</div>
+            <div class="desc">Weekend problem set practice • 8 members</div>
+          </div>
+          <div class="right">
+            <button class="btn">Open Chat</button>
+            <button class="btn">Schedule</button>
+          </div>
+        </div>
+
+        <div class="group">
+          <div>
+            <div class="name">BUS102 • Case Study Crew</div>
+            <div class="desc">Fri 5pm campus library • 10 members</div>
+          </div>
+          <div class="right">
+            <button class="btn">Open Chat</button>
+            <button class="btn">Schedule</button>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </section>
+
+  <!-- RIGHT COLUMN -->
+  <aside class="col rightcol">
+    <div class="card">
+      <div class="mini-title">Guidelines</div>
+      <ul style="margin:0 0 4px 18px; color:var(--muted); line-height:1.7">
+        <li>Stay academic & professional</li>
+        <li>No spam or promotions</li>
+        <li>Be respectful and inclusive</li>
+        <li>Use tags for courses/topics</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="mini-title">Upcoming</div>
+      <div class="group">
+        <div>
+          <div class="name">CS101 Lab 2</div>
+          <div class="desc">Thu • 10:00–12:00</div>
+        </div>
+        <span class="pill">Reminder</span>
+      </div>
+      <div class="group">
+        <div>
+          <div class="name">ENG201 Quiz</div>
+          <div class="desc">Mon • 9:00</div>
+        </div>
+        <span class="pill">Prep</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="mini-title">Popular Tags</div>
+      <div class="row" style="flex-wrap:wrap">
+        <span class="pill">#announcement</span>
+        <span class="pill">#assignment</span>
+        <span class="pill">#study-tips</span>
+        <span class="pill">#exam</span>
+        <span class="pill">#groups</span>
+      </div>
+    </div>
+  </aside>
+</main>
+
+<!-- CREATE GROUP MODAL -->
+<div class="modal" id="modalGroup">
+  <div class="dialog">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px">
+      <h3 style="margin:0">Create Study Group</h3>
+      <button class="btn btn-danger" id="closeGroup">Close</button>
+    </div>
+    <div class="row" style="margin-bottom:10px">
+      <input id="gName" placeholder="Group name e.g., CS101 • Python Basics Circle" />
+    </div>
+    <div class="row" style="margin-bottom:10px">
+      <textarea id="gDesc" rows="3" placeholder="Description e.g., Meets Tue/Thu 8pm • goal: finish Lab 2"></textarea>
+    </div>
+    <div class="row" style="margin-bottom:10px">
+      <select id="gCourse">
+        <option value="CS101">CS101</option>
+        <option value="BUS102">BUS102</option>
+        <option value="ENG201">ENG201</option>
+      </select>
+      <input id="gSize" type="number" min="2" max="50" value="10" placeholder="Max members" />
+    </div>
+    <div class="row" style="justify-content:flex-end">
+      <button class="btn" id="resetGroup">Reset</button>
+      <button class="btn-primary" id="saveGroup">Create Group</button>
+    </div>
+  </div>
+</div>
+
+<!-- NEW POST MODAL -->
+<div class="modal" id="modalPost">
+  <div class="dialog">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px">
+      <h3 style="margin:0">New EduFeed Post</h3>
+      <button class="btn btn-danger" id="closePost">Close</button>
+    </div>
+    <div class="row" style="margin-bottom:10px">
+      <input id="pTitle" placeholder="Post title (optional)" />
+    </div>
+    <div class="row" style="margin-bottom:10px">
+      <textarea id="pBody" rows="4" placeholder="Write your announcement, question, or study tip…"></textarea>
+    </div>
+    <div class="row" style="justify-content:flex-end">
+      <button class="btn" id="resetPost">Reset</button>
+      <button class="btn-primary" id="publishPost">Publish</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Tab switching
+  const tabs = document.querySelectorAll('.tab');
+  const panes = {
+    feed: document.getElementById('pane-feed'),
+    forums: document.getElementById('pane-forums'),
+    groups: document.getElementById('pane-groups')
+  };
+  tabs.forEach(t=>{
+    t.addEventListener('click', ()=>{
+      tabs.forEach(x=>{x.classList.remove('active'); x.setAttribute('aria-selected','false')});
+      t.classList.add('active'); t.setAttribute('aria-selected','true');
+      Object.values(panes).forEach(p=>p.classList.remove('active'));
+      panes[t.dataset.tab].classList.add('active');
+    });
+  });
+
+  // Modals
+  const modalGroup = document.getElementById('modalGroup');
+  const openCreateGroup = document.getElementById('openCreateGroup');
+  const closeGroup = document.getElementById('closeGroup');
+  const saveGroup = document.getElementById('saveGroup');
+  const resetGroup = document.getElementById('resetGroup');
+  const gName = document.getElementById('gName');
+  const gDesc = document.getElementById('gDesc');
+  const gCourse = document.getElementById('gCourse');
+  const gSize = document.getElementById('gSize');
+
+  openCreateGroup?.addEventListener('click', ()=> modalGroup.classList.add('open'));
+  closeGroup?.addEventListener('click', ()=> modalGroup.classList.remove('open'));
+  modalGroup?.addEventListener('click', (e)=>{ if(e.target===modalGroup) modalGroup.classList.remove('open'); });
+  resetGroup?.addEventListener('click', ()=>{ gName.value=''; gDesc.value=''; gSize.value=10; gCourse.value='CS101'; });
+
+  saveGroup?.addEventListener('click', ()=>{
+    const name = gName.value.trim();
+    const desc = gDesc.value.trim() || 'New group created';
+    if(!name){ alert('Please enter a group name.'); return; }
+    const container = document.querySelector('#pane-groups');
+    const div = document.createElement('div');
+    div.className = 'group';
+    div.innerHTML = `
+      <div>
+        <div class="name">${name}</div>
+        <div class="desc">${desc}</div>
+      </div>
+      <div class="right">
+        <button class="btn">Open Chat</button>
+        <button class="btn">Schedule</button>
+      </div>`;
+    container.appendChild(div);
+    modalGroup.classList.remove('open');
+    resetGroup.click();
+  });
+
+  // New Post modal
+  const modalPost = document.getElementById('modalPost');
+  const btnNewPost = document.getElementById('btnNewPost');
+  const closePost = document.getElementById('closePost');
+  const resetPost = document.getElementById('resetPost');
+  const publishPost = document.getElementById('publishPost');
+  const pTitle = document.getElementById('pTitle');
+  const pBody = document.getElementById('pBody');
+
+  btnNewPost?.addEventListener('click', ()=> modalPost.classList.add('open'));
+  closePost?.addEventListener('click', ()=> modalPost.classList.remove('open'));
+  modalPost?.addEventListener('click', (e)=>{ if(e.target===modalPost) modalPost.classList.remove('open'); });
+  resetPost?.addEventListener('click', ()=>{ pTitle.value=''; pBody.value=''; });
+
+  publishPost?.addEventListener('click', ()=>{
+    const body = pBody.value.trim();
+    if(!body){ alert('Please write something to post.'); return; }
+    const feed = document.querySelector('#pane-feed');
+    const article = document.createElement('article');
+    article.className = 'post';
+    article.innerHTML = `
+      <div class="avatar"></div>
+      <div>
+        <div class="meta"><strong>You</strong> • Just now <span class="tag">Post</span></div>
+        <div class="bubble">
+          ${pTitle.value ? `<strong>${pTitle.value}</strong><br/>` : ''}${body}
+          <div class="post-actions">
+            <button class="btn">👍 0</button>
+            <button class="btn">💬 0</button>
+            <button class="btn">🔗 Copy link</button>
+          </div>
+        </div>
+      </div>`;
+    // Insert after composer + hr
+    const hr = feed.querySelector('hr');
+    feed.insertBefore(article, hr.nextSibling);
+    modalPost.classList.remove('open');
+    resetPost.click();
+  });
+</script>
+</body>
+</html>
+
+

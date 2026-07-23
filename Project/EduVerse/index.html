@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EduVerse • Dashboard</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --card: #101828;
+      --muted: #9aa4b2;
+      --text: #e6e9ef;
+      --accent: #6ea8fe;
+      --accent-2: #22c55e;
+      --border: #1f2937;
+      --radius: 16px;
+    }
+    body {
+      margin:0; font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial;
+      background: radial-gradient(1200px 600px at 80% -10%, #13213a 0%, #0b1220 60%), var(--bg);
+      color:var(--text);
+    }
+    a{color:inherit;text-decoration:none}
+    .container{display:grid; grid-template-columns:280px 1fr 360px; gap:20px; padding:20px; max-width:1400px; margin:0 auto;}
+    header {
+      position:sticky; top:0; z-index:10; backdrop-filter: blur(10px);
+      background: linear-gradient(180deg, rgba(11,18,32,.9), rgba(11,18,32,.6));
+      border-bottom:1px solid var(--border);
+    }
+    .topbar{max-width:1400px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; gap:14px;}
+    .logo{display:flex; align-items:center; gap:10px; font-weight:800;}
+    .logo-img{width:28px;height:28px;object-fit:contain}
+    .actions{margin-left:auto}
+    .profile-img{width:34px;height:34px;border-radius:50%;border:2px solid var(--accent);cursor:pointer}
+
+    /* Cards */
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.0));
+      border:1px solid var(--border); border-radius: var(--radius); padding:16px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.02);
+    }
+    .col{display:flex; flex-direction:column; gap:16px}
+    .section-title{font-size:13px; color:var(--muted); text-transform:uppercase; margin-bottom:8px; letter-spacing:.1em}
+
+    /* Progress Circle */
+    .progress-circle {
+      width:120px;height:120px;border-radius:50%;
+      background:conic-gradient(var(--accent) calc(var(--progress)*1%), #1f2937 0);
+      display:flex; align-items:center; justify-content:center;
+      font-size:22px; font-weight:bold;
+    }
+
+    /* Small boxes (widgets) */
+    .widgets {display:grid; grid-template-columns:repeat(3,1fr); gap:12px;}
+    .widget-box {
+      background:#0e1629; border:1px solid var(--border); border-radius:12px; padding:14px; text-align:center; cursor:pointer;
+      transition:.2s;
+    }
+    .widget-box:hover {background:#13223c;}
+    .widget-box h4{margin:6px 0 4px; font-size:14px}
+
+    /* Calendar */
+    .calendar {width:100%; border-collapse:collapse; text-align:center; font-size:13px;}
+    .calendar th {
+      padding:8px; background:#0e1629; border:1px solid var(--border); color:var(--muted);
+    }
+    .calendar td {
+      padding:10px; border:1px solid var(--border); background:#0e1629; min-width:40px;
+    }
+    .calendar .exam {background:#ef4444;color:white;font-weight:bold}
+    .calendar .holiday {background:#22c55e;color:white;font-weight:bold}
+    .calendar .due {background:#f59e0b;color:white;font-weight:bold}
+
+    .legend {display:flex; gap:12px; margin-top:10px; font-size:12px;}
+    .legend span {display:inline-flex; align-items:center; gap:6px;}
+    .legend-box {width:14px;height:14px; border-radius:4px;}
+    .legend-exam {background:#ef4444;}
+    .legend-holiday {background:#22c55e;}
+    .legend-due {background:#f59e0b;}
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="topbar">
+    <div class="logo">
+      <img src="eduverse-applogo.png" alt="EduVerse Logo" class="logo-img" />
+      <div>EduVerse <span style="font-size:12px;color:var(--muted)">Dashboard</span></div>
+    </div>
+    <div class="actions">
+      <img src="profile.png" alt="Profile" class="profile-img" />
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <!-- SIDEBAR -->
+  <aside class="col">
+    <div class="card">
+      <div class="section-title">Navigation</div>
+      <a class="item" href="#">Dashboard</a>
+      <a class="item" href="#">Courses</a>
+      <a class="item" href="#">Community</a>
+      <a class="item" href="#">Library</a>
+      <a class="item" href="#">Assignments</a>
+    </div>
+  </aside>
+
+  <!-- MIDDLE -->
+  <section class="col">
+    <div class="card" style="display:flex; gap:20px; align-items:center">
+      <div class="progress-circle" style="--progress:75">75%</div>
+      <div>
+        <h3>Progress Tracker</h3>
+        <p style="color:var(--muted)">You’ve completed 9/12 assignments this semester. Keep it up!</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Quick Access</div>
+      <div class="widgets">
+        <div class="widget-box">
+          <h4>📚 Courses</h4>
+          <p style="color:var(--muted)">View all modules</p>
+        </div>
+        <div class="widget-box">
+          <h4>📝 Assignments</h4>
+          <p style="color:var(--muted)">Check deadlines</p>
+        </div>
+        <div class="widget-box">
+          <h4>💬 Community</h4>
+          <p style="color:var(--muted)">Join discussions</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">Calendar</div>
+      <table class="calendar">
+        <thead>
+        <tr>
+          <th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr><td></td><td></td><td>1</td><td>2</td><td class="exam">3</td><td>4</td><td>5</td></tr>
+        <tr><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td class="holiday">11</td><td>12</td></tr>
+        <tr><td>13</td><td>14</td><td>15</td><td>16</td><td class="due">17</td><td>18</td><td>19</td></tr>
+        <tr><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td><td class="exam">25</td><td>26</td></tr>
+        <tr><td>27</td><td>28</td><td>29</td><td>30</td><td>31</td><td></td><td></td></tr>
+        </tbody>
+      </table>
+      <div class="legend">
+        <span><div class="legend-box legend-exam"></div> Exam</span>
+        <span><div class="legend-box legend-holiday"></div> Holiday</span>
+        <span><div class="legend-box legend-due"></div> Due Date</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- RIGHT -->
+  <aside class="col">
+    <div class="card">
+      <div class="section-title">Announcements</div>
+      <p>📢 CS101 midterm rescheduled to next Friday.</p>
+      <p>📢 Library closed on 11th for holiday.</p>
+    </div>
+    <div class="card">
+      <div class="section-title">Today’s Schedule</div>
+      <p>10:00 – ENG201 Lecture</p>
+      <p>14:00 – BUS102 Tutorial</p>
+      <p>20:00 – CS101 Study Group</p>
+    </div>
+  </aside>
+</main>
+
+</body>
+</html>
